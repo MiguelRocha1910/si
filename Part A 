@@ -1,0 +1,45 @@
+Parte A – Identificação dos Componentes do Sistema de Informação
+1. Tipos de Sistemas de Informação Envolvidos
+
+CRM (Customer Relationship Management):
+Gere e organiza dados dos clientes.
+Usado para analisar comportamentos e preferências dos clientes.
+Sistemas de Data Warehousing e BI (Business Intelligence):
+Consolida dados de diferentes fontes para análise.
+Permite a extração de insights estratégicos.
+ERP (Enterprise Resource Planning):
+Integra dados de diferentes departamentos, como marketing e vendas.
+2. Principais Pessoas Envolvidas
+
+Clientes: Fornecem dados (ex.: compras, interações).
+Equipes de Marketing e Vendas: Utilizam dados para planejar campanhas e estratégias de vendas.
+Analistas de Dados: Responsáveis por processar e interpretar dados.
+Equipe de TI: Mantém e gerencia os sistemas de informação.
+3. Hardware e Software Utilizados
+
+Hardware:
+Servidores para armazenar e processar grandes volumes de dados.
+Dispositivos de rede para conectividade.
+Software:
+Ferramentas de CRM, como Salesforce.
+Softwares analíticos: Python (pandas, matplotlib, seaborn) e Power BI.
+Sistemas de armazenamento e processamento: Bancos de dados SQL.
+4. Dados Coletados e Gerados
+
+Coletados:
+Dados demográficos: ID, ano de nascimento, estado civil, rendimento anual.
+Dados comportamentais: histórico de compras, dias desde a última compra, visitas ao site.
+Dados promocionais: resposta a campanhas, compras com descontos.
+Gerados:
+Clusters de clientes baseados em perfis de consumo.
+Previsões sobre comportamento futuro (árvores de decisão).
+5. Modelo de Dados Multidimensional
+
+Fatos:
+Informações como total de compras, total gasto em diferentes categorias de produtos.
+Dimensões:
+Cliente: ID, idade, estado civil.
+Produto: Categorias de produtos (vinhos, frutas, etc.).
+Tempo: Data de compra, mês, ano.
+Canal: Loja física, online, catálogo.
+Exemplo de KPI: Taxa de resposta a campanhas.

@@ -1,0 +1,54 @@
+Objetivo Geral
+
+Este código realiza uma análise de dados com três principais componentes:
+
+Estatística Descritiva e Visualização de Dados.
+Clustering (Agrupamento) para segmentação de clientes.
+Árvores de Decisão para análise preditiva.
+1. Estatística Descritiva e Gráficos
+
+Descrição dos dados:
+São verificadas variáveis como Income (Renda) e gastos em diferentes categorias de produtos (MntWines, MntFruits, etc.).
+Valores ausentes nas colunas numéricas são preenchidos com suas respectivas médias.
+Figuras Geradas:
+Distribuição da Renda dos Clientes:
+Histograma que mostra a distribuição da variável Income (Renda Anual).
+Identifica grupos de renda predominantes.
+Relação entre Renda e Gasto com Vinhos:
+Gráfico de dispersão que mostra a correlação entre a renda dos clientes e os gastos em vinhos (MntWines).
+2. Clustering (Análise de Agrupamentos)
+
+Passos Executados:
+Normalização dos dados com StandardScaler.
+Determinação do número ideal de clusters usando o Método do Cotovelo.
+Aplicação do algoritmo K-Means com o número ideal de clusters (ajustado manualmente para 4).
+Resumo estatístico das características médias de cada cluster.
+Figuras Geradas:
+Método do Cotovelo:
+Gráfico que ajuda a identificar o número ideal de clusters observando o ponto onde a redução de inércia diminui (elbow point).
+Visualização dos Clusters:
+Pairplot colorido com os clusters identificados, mostrando a segmentação dos clientes.
+3. Árvores de Decisão
+
+Passos Executados:
+Seleção da variável Response como variável objetivo (se o cliente aceitou a última campanha).
+Divisão dos dados em conjuntos de treino (70%) e teste (30%).
+Construção de uma árvore de decisão para prever se o cliente aceitaria uma oferta baseada nas variáveis explicativas.
+Figuras Geradas:
+Árvore de Decisão:
+Gráfico visual da árvore, exibindo as divisões e critérios.
+Matriz de Confusão:
+Tabela que avalia a performance do modelo em prever corretamente as respostas.
+Relatório de Classificação:
+Métricas de desempenho como precisão (accuracy), recall e F1-score.
+Conclusões para a Apresentação
+
+Insights da Estatística Descritiva:
+Identificação de padrões de gastos e distribuição de renda dos clientes.
+Relação entre categorias de produtos e variáveis demográficas.
+Segmentação por Clustering:
+Identificação de grupos de clientes com comportamentos distintos.
+Facilita a definição de estratégias específicas para cada grupo.
+Modelo de Árvores de Decisão:
+Utilizado para prever o comportamento do cliente com base em características demográficas e hábitos de compra.
+Resultados podem ser usados para melhorar campanhas direcionadas.

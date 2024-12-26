@@ -1,0 +1,124 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import classification_report, confusion_matrix
+
+# 1. Importar os dados
+# Endereçar caminho da pastqa com os dados 'marketing_campaign.csv.xls'
+file_path = '/Users/angelomiguelrocha/Desktop/vs studio/marketing_campaign.csv'  # Ajuste o caminho conforme necessário
+try:
+    data = pd.read_csv(file_path, sep=';')  # Interpretar como CSV separado por ponto e vírgula
+except FileNotFoundError:
+    print(f"Erro: Certifique-se de que o arquivo '{file_path}' está no diretório correto.")
+    raise
+
+# Verificar as colunas disponíveis no DataFrame
+print("Colunas disponíveis no DataFrame antes da normalização:")
+print(data.columns)
+print("Visualização das 5 primeiras linhas do DataFrame:")
+print(data.head())
+
+# Normalizar os nomes das colunas (remover espaços extras, capitalização, etc.)
+data.columns = data.columns.str.strip().str.replace(' ', '_').str.lower()
+print("Colunas disponíveis no DataFrame após normalização:")
+print(data.columns)
+print("Visualização das 5 primeiras linhas do DataFrame após normalização:")
+print(data.head())
+
+# 2. Estatística descritiva
+print("Resumo dos dados:")
+print(data.describe())
+print("\nValores ausentes:")
+print(data.isnull().sum())
+
+# Preencher valores ausentes apenas nas colunas numéricas
+numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
+if len(numeric_cols) > 0:
+    data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+
+# Visualização de algumas distribuições
+if 'income' in data.columns:
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data['income'], kde=True, bins=30, color='blue')
+    plt.title('Distribuição de Renda dos Clientes')
+    plt.xlabel('Renda Anual')
+    plt.ylabel('Frequência')
+    plt.show()
+else:
+    print("Coluna 'income' não encontrada no DataFrame.")
+
+if 'income' in data.columns and 'mntwines' in data.columns:
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x='income', y='mntwines', data=data)
+    plt.title('Relação entre Renda e Gasto com Vinhos')
+    plt.xlabel('Renda Anual')
+    plt.ylabel('Gasto com Vinhos')
+    plt.show()
+else:
+    print("Colunas 'income' ou 'mntwines' não encontradas no DataFrame.")
+
+# 3. Clustering (Análise de Agrupamentos)
+cluster_columns = ['income', 'mntwines', 'mntfruits', 'mntmeatproducts', 'mntfishproducts', 'mntsweetproducts']
+cluster_data = data[[col for col in cluster_columns if col in data.columns]].dropna()
+
+if not cluster_data.empty:
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(cluster_data)
+
+    # Determinar o número ideal de clusters (método do cotovelo)
+    inertia = []
+    for k in range(1, 11):
+        kmeans = KMeans(n_clusters=k, random_state=42)
+        kmeans.fit(scaled_data)
+        inertia.append(kmeans.inertia_)
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(range(1, 11), inertia, marker='o')
+    plt.title('Método do Cotovelo')
+    plt.xlabel('Número de Clusters')
+    plt.ylabel('Inércia')
+    plt.show()
+
+    # Aplicar K-Means com o número ideal de clusters (ex.: 4)
+    optimal_clusters = 4  # Ajustar com base no gráfico
+    kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+    cluster_data['cluster'] = kmeans.fit_predict(scaled_data)
+
+    # Resumo dos clusters
+    cluster_summary = cluster_data.groupby('cluster').mean()
+    print("Resumo dos Clusters:")
+    print(cluster_summary)
+
+    # Visualizar os clusters
+    sns.pairplot(cluster_data, hue='cluster', palette='tab10')
+    plt.show()
+else:
+    print("Dados insuficientes para análise de clustering.")
+
+# 4. Árvores de Decisão
+required_columns = ['income', 'mntwines', 'mntmeatproducts', 'numwebpurchases', 'numcatalogpurchases']
+if all(col in data.columns for col in required_columns) and 'response' in data.columns:
+    data['response'] = data['response'].fillna(0)
+    X = data[required_columns]
+    y = data['response']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    dtree = DecisionTreeClassifier(max_depth=5, random_state=42)
+    dtree.fit(X_train, y_train)
+
+    y_pred = dtree.predict(X_test)
+    print("Relatório de Classificação:\n", classification_report(y_test, y_pred))
+    print("\nMatriz de Confusão:\n", confusion_matrix(y_test, y_pred))
+
+    # Visualizar a árvore de decisão
+    plt.figure(figsize=(20, 10))
+    plot_tree(dtree, feature_names=X.columns, class_names=['Não', 'Sim'], filled=True, fontsize=10)
+    plt.show()
+else:
+    print("Colunas necessárias para a árvore de decisão não estão disponíveis no DataFrame.")
